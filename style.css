@@ -84,6 +84,7 @@ body {
 }
 
 .time-controls-wrapper {
+  grid-area: span 1 / span 3 / span 1 / span 3;
   grid-column-gap: 0.1rem;
   grid-row-gap: 0.1rem;
   grid-template-rows: auto;
@@ -111,6 +112,11 @@ body {
   text-align: right;
 }
 
+.progress-control {
+  /* display: block; */
+  display: grid;
+}
+
 /* .inline {
   display: inline;
 } */
@@ -120,7 +126,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   gap: 10px;
-  grid-template-areas: "item1 item2 item3";
+  grid-template-areas: 'item1 item2 item3';
 }
 
 .item1 {
@@ -145,4 +151,13 @@ body {
   background-color: #f0f0f0;
   padding: 20px;
   text-align: center;
+}
+
+.mute-icon {
+  background-image: url('./mute.jpg');
+  z-index: 999;
+}
+.unmute-icon {
+  background-image: url('./unmute.png');
+  z-index: 999;
 }

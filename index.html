@@ -3,7 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+
     <link rel="stylesheet" href="style.css" />
+    <script src="functions.js"></script>
     <title>Audio Player</title>
   </head>
   <body>
@@ -14,8 +22,15 @@
 
       <div>
         <form action="">
-          <label for="myfile">Upload a file:</label><br />
-          <input type="file" id="audiofile" name="audiofile" />
+          <label for="audiofile">Upload a file:</label><br />
+          <input
+            type="file"
+            accept=".mp3, .wav"
+            id="audiofile"
+            name="audiofile"
+          />
+
+          <!-- <button type="'submit">Submit</button> -->
         </form>
       </div>
       <br />
@@ -43,11 +58,11 @@
                 </svg>
               </div>
             </a>
-            <input type="range" />
+            <input type="range" data-audio="volume" />
           </div>
         </div>
         <div class="video-controls inline">
-          <a href="#" class="control-button w-inline-block">
+          <a id="reverse10s" href="#" class="control-button w-inline-block">
             <div class="html-icon w-embed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +82,12 @@
               </svg>
             </div>
           </a>
-          <a href="#" class="control-button w-inline-block">
+          <a
+            id="playbtn"
+            data-audio="play"
+            href="#"
+            class="control-button w-inline-block"
+          >
             <div class="html-icon w-embed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +103,12 @@
               </svg>
             </div>
           </a>
-          <a href="#" class="control-button w-inline-block">
+          <a
+            id="pausebtn"
+            data-audio="pause"
+            href="#"
+            class="control-button w-inline-block"
+          >
             <div class="html-icon w-embed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +128,7 @@
               </svg>
             </div>
           </a>
-          <a href="#" class="control-button w-inline-block">
+          <a id="fore10s" href="#" class="control-button w-inline-block">
             <div class="html-icon w-embed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -125,6 +150,17 @@
                   d="M10.9 16v-4.27h-.09l-1.77.63v.69l1.01-.31V16zm3.42-4.22c-.18-.07-.37-.1-.59-.1s-.41.03-.59.1s-.33.18-.45.33s-.23.34-.29.57s-.1.5-.1.82v.74c0 .32.04.6.11.82s.17.42.3.57s.28.26.46.33s.37.1.59.1s.41-.03.59-.1s.33-.18.45-.33s.22-.34.29-.57s.1-.5.1-.82v-.74c0-.32-.04-.6-.11-.82s-.17-.42-.3-.57s-.29-.26-.46-.33zm.01 2.57c0 .19-.01.35-.04.48s-.06.24-.11.32s-.11.14-.19.17s-.16.05-.25.05s-.18-.02-.25-.05s-.14-.09-.19-.17s-.09-.19-.12-.32s-.04-.29-.04-.48v-.97c0-.19.01-.35.04-.48s.06-.23.12-.31s.11-.14.19-.17s.16-.05.25-.05s.18.02.25.05s.14.09.19.17s.09.18.12.31s.04.29.04.48v.97z"
                 ></path>
               </svg>
+            </div>
+          </a>
+          <a
+            id="mutebtn"
+            data-audio="mute"
+            href="#"
+            class="control-button w-inline-block"
+          >
+            <div class="html-icon w-embed unmute-icon">
+              mute
+              <!-- <i class="fas fa-volume-mute"></i> -->
             </div>
           </a>
         </div>
@@ -166,33 +202,19 @@
           </div>
         </div>
 
-        <div class="progress-control">
-          <div f-data-video="current-time" class="video-watched inline">
+        <div class="time-controls-wrapper">
+          <div f-data-video="current-time" class="video-watched inline-block">
             00:00
           </div>
-          <div f-data-video="progress-bar" class="track-3 inline">
+          <div f-data-video="progress-bar" class="track-3 inline-block">
             <div f-data-video="progress" class="trackinner-2 large"></div>
             <div f-data-video="loading" class="video-loading-track"></div>
           </div>
-          <div f-data-video="duration" class="video-duration inline">00:00</div>
+          <div f-data-video="duration" class="video-duration inline-block">
+            00:00
+          </div>
         </div>
       </div>
-      <audio controls id="audioElement">
-        <source src="https://example.com/audio.mp3" type="audio/mpeg" />
-      </audio>
     </div>
   </body>
 </html>
-<script>
-  const audioElement = document.querySelector("#audioElement");
-
-  const playButton = document.querySelector("#playButton");
-  playButton.addEventListener("click", () => {
-    audioElement.play();
-  });
-
-  const pauseButton = document.querySelector("#pauseButton");
-  pauseButton.addEventListener("click", () => {
-    audioElement.pause();
-  });
-</script>
