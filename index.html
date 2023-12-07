@@ -62,7 +62,7 @@
           </div>
         </div>
         <div class="video-controls inline">
-          <a id="reverse10s" href="#" class="control-button w-inline-block">
+          <!-- <a id="reverse10s" href="#" class="control-button w-inline-block">
             <div class="html-icon w-embed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@
                 ></path>
               </svg>
             </div>
-          </a>
+          </a> -->
           <a
             id="playbtn"
             data-audio="play"
@@ -128,7 +128,7 @@
               </svg>
             </div>
           </a>
-          <a id="fore10s" href="#" class="control-button w-inline-block">
+          <!-- <a id="fore10s" href="#" class="control-button w-inline-block">
             <div class="html-icon w-embed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +151,7 @@
                 ></path>
               </svg>
             </div>
-          </a>
+          </a> -->
           <a
             id="mutebtn"
             data-audio="mute"
@@ -166,7 +166,7 @@
         </div>
         <div class="video-controls right-aligned">
           <div class="video-volume-wrapper _1"></div>
-          <div class="control-button hide-mobile-landscape">
+          <!-- <div class="control-button hide-mobile-landscape">
             <div
               data-delay="0"
               data-hover="false"
@@ -199,18 +199,37 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="time-controls-wrapper">
-          <div f-data-video="current-time" class="video-watched inline-block">
+          <div
+            id="currentTime"
+            f-data-video="current-time"
+            class="video-watched inline-block"
+          >
             00:00
           </div>
-          <div f-data-video="progress-bar" class="track-3 inline-block">
+          <!-- <div f-data-video="progress-bar" class="track-3 inline-block"> -->
+          <input
+            type="range"
+            id="progressBar"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0"
+            data-audio="progress"
+          />
+          <!-- </div> -->
+          <!-- <div f-data-video="progress-bar" class="track-3 inline-block">
             <div f-data-video="progress" class="trackinner-2 large"></div>
             <div f-data-video="loading" class="video-loading-track"></div>
-          </div>
-          <div f-data-video="duration" class="video-duration inline-block">
+          </div> -->
+          <div
+            id="totalDuration"
+            f-data-video="duration"
+            class="video-duration inline-block"
+          >
             00:00
           </div>
         </div>
