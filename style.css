@@ -85,14 +85,14 @@ body {
 
 .time-controls-wrapper {
   grid-area: span 1 / span 3 / span 1 / span 3;
-  grid-column-gap: 0.1rem;
+  grid-column-gap: 0.8rem;
   grid-row-gap: 0.1rem;
   grid-template-rows: auto;
-  grid-template-columns: 5% 90% 5%;
+  grid-template-columns: 5% 80% 5%;
   grid-auto-columns: 1fr;
   justify-content: stretch;
   align-items: center;
-  display: flex;
+  display: grid;
   position: relative;
 }
 .track-3 {
@@ -153,11 +153,26 @@ body {
   text-align: center;
 }
 
-.mute-icon {
+/* .mute-icon {
   background-image: url('./mute.jpg');
   z-index: 999;
 }
 .unmute-icon {
   background-image: url('./unmute.png');
   z-index: 999;
+} */
+
+a[data-audio='unmute'] .mute-icon {
+  background-image: url('https://img.icons8.com/?size=100&id=9982&format=png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  padding: 10px;
+  background-position: center center;
+}
+a[data-audio='mute'] .mute-icon {
+  background-image: url('https://img.icons8.com/?size=100&id=9414&format=png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  padding: 10px;
+  background-position: center center;
 }
