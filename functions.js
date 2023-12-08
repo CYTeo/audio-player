@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     progressBarValue,
     currentTimeOnchangedProgress;
 
+  let convertedCurrentTime, convertedTotalDuration;
+
   let isPlaying = false;
   let continuePlay = false;
   let progressBarHadler = false;
@@ -68,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // source.connect(audioContext.destination);
     source.buffer = buffer;
     totalDuration = buffer.duration;
-    totalDurationElement.innerHTML = totalDuration.toFixed(2);
+    totalDurationElement.innerHTML = convertTime(totalDuration); //.toFixed(2);
 
     if (replay) {
       source.start(0, currentTime);
@@ -76,7 +78,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  //
+  function convertTime(currentTime) {
+    const mins = Math.floor(currentTime / 60);
+    let seconds = Math.round(currentTime - mins * 60);
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+    return `${mins}:${seconds}`;
+  }
 
   function handleOnChangeProgressBar(event) {
     console.log("event ", event);
@@ -176,18 +185,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateProgressBar() {
-    // console.log("progressbar current time :", audioContext.currentTime);
     progressBarValue =
       (currentTime + audioContext.currentTime) / source.buffer.duration;
-    // console.log('progressBarValue:', progressBarValue);
     progressBar.value = progressBarValue;
-
+    const timeNow = convertTime(currentTime + audioContext.currentTime);
+    console.log("time now ", timeNow);
     if (progressBarHadler) {
-      currentTimeElement.innerHTML = (
-        currentTimeOnchangedProgress + audioContext.currentTime
-      ).toFixed(2);
+      // currentTimeElement.innerHTML = (
+      //   currentTimeOnchangedProgress + audioContext.currentTime
+      // ).toFixed(2);
+      currentTimeElement.innerHTML = timeNow;
     } else {
-      currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
+      // currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
+      currentTimeElement.innerHTML = timeNow;
     }
     animationFrameId = requestAnimationFrame(updateProgressBar);
     if (audioContext.currentTime >= totalDuration) {
