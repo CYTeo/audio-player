@@ -1,22 +1,30 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   var file = null;
-  const audioFileInput = document.getElementById('audioFile');
-  const playButton = document.getElementById('playbtn');
-  const pauseButton = document.getElementById('pausebtn');
-  const progressBar = document.getElementById('progressBar');
-  const volumeSlider = document.querySelector('#volumeSlider');
-  const muteButton = document.querySelector('#mutebtn');
+  const audioFileInput = document.getElementById("audioFile");
+  const playButton = document.getElementById("playbtn");
+  const pauseButton = document.getElementById("pausebtn");
+  const progressBar = document.getElementById("progressBar");
+  const volumeSlider = document.querySelector("#volumeSlider");
+  const muteButton = document.querySelector("#mutebtn");
 
-  const currentTimeElement = document.getElementById('currentTime');
-  const totalDurationElement = document.getElementById('totalDuration');
+  const currentTimeElement = document.getElementById("currentTime");
+  const totalDurationElement = document.getElementById("totalDuration");
 
-  let audioContext, source, gainNode, totalDuration, progressBarValue;
+  let audioContext,
+    source,
+    gainNode,
+    totalDuration,
+    progressBarValue,
+    currentTimeOnchangedProgress;
+
   let isPlaying = false;
   let continuePlay = false;
+  let progressBarHadler = false;
+
   let currentTime = 0;
   let volumeValue = 0.5;
 
-  console.log('volume ', volumeSlider);
+  console.log("volume ", volumeSlider);
   // handle file input change
   function handleFileChange(event) {
     // once the file changed, load the audio file
@@ -59,14 +67,32 @@ document.addEventListener('DOMContentLoaded', () => {
     totalDuration = buffer.duration;
     totalDurationElement.innerHTML = totalDuration.toFixed(2);
 
-    // if (replay) {
-    //   console.log('replay current time :', audioContext.currentTime);
-    //   source.start(0, currentTime);
-    //   updateProgressBar();
-    // }
+    if (replay) {
+      console.log("replay current time :", audioContext.currentTime);
+      source.start(0, currentTime);
+      updateProgressBar();
+    }
   }
 
   //
+
+  function handleOnChangeProgressBar(event) {
+    console.log("event ", event);
+    // console.log("value changed to  ", event.target.value);
+    // console.log("total duration ", totalDuration);
+
+    // the current time based on the progress bar
+    currentTimeOnchangedProgress = event.target.value * totalDuration;
+    console.log("current time in progress bar", currentTimeOnchangedProgress);
+    currentTime = currentTimeOnchangedProgress;
+
+    // clear source and create source again and call start(0,currenttime)
+    clearBufferSource();
+    loadAudioFile(file, true);
+    isPlaying = true;
+    progressBarHadler = true;
+  }
+
   function clearBufferSource() {
     if (source) {
       // Disconnect the source node from the audio context
@@ -80,10 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function playAudio() {
     if (!isPlaying) {
       if (continuePlay) {
-        // clearBufferSource();
-        // loadAudioFile(file, true);
-        // source.start(0, currentTime);
-        currentTime = 0;
+        if (progressBarHadler) {
+          currentTime = currentTimeOnchangedProgress;
+        }
         audioContext.resume();
         isPlaying = true;
         updateProgressBar();
@@ -97,8 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function pauseAudio() {
     if (isPlaying) {
-      currentTime = audioContext.currentTime;
-      // source.stop();
+      if (progressBarHadler) {
+        console.log("progressbar clicked!!!!");
+        currentTime = currentTimeOnchangedProgress;
+      } else {
+        currentTime = audioContext.currentTime;
+      }
+      console.log("audio context", audioContext);
+      console.log("current time ", currentTime);
       audioContext.suspend();
 
       isPlaying = false;
@@ -113,7 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
       (currentTime + audioContext.currentTime) / source.buffer.duration;
     // console.log('progressBarValue:', progressBarValue);
     progressBar.value = progressBarValue;
-    currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
+
+    if (progressBarHadler) {
+      currentTimeElement.innerHTML = (
+        currentTimeOnchangedProgress + audioContext.currentTime
+      ).toFixed(2);
+    } else {
+      currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
+    }
     animationFrameId = requestAnimationFrame(updateProgressBar);
     if (audioContext.currentTime >= totalDuration) {
       pauseAudio();
@@ -130,30 +168,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleMute() {
-    // console.log('click mute ');
-    const audioData = muteButton.getAttribute('data-audio');
-    console.log('audioData ', audioData);
+    const audioData = muteButton.getAttribute("data-audio");
+    console.log("audioData ", audioData);
 
     // currently mute. after click, need to set to unmute and handle volume
-    if (audioData == 'mute') {
-      muteButton.setAttribute('data-audio', 'unmute');
+    if (audioData == "mute") {
+      muteButton.setAttribute("data-audio", "unmute");
       handleVolume();
     } else {
       // currently unmute. after click, need to set to mute and volume = 0
-      muteButton.setAttribute('data-audio', 'mute');
+      muteButton.setAttribute("data-audio", "mute");
       gainNode.gain.value = 0;
     }
   }
 
-  audioFileInput.addEventListener('change', handleFileChange);
-  playButton.addEventListener('click', playAudio);
-  pauseButton.addEventListener('click', pauseAudio);
-  progressBar.addEventListener('change', () => {
-    // source.playbackRate.setValueAtTime(0, audioContext.currentTime);
-    // source.playbackRate.setValueAtTime(1, audioContext.currentTime + 0.01);
-    // source.start(audioContext.currentTime, currentTime);
-  });
+  audioFileInput.addEventListener("change", handleFileChange);
+  playButton.addEventListener("click", playAudio);
+  pauseButton.addEventListener("click", pauseAudio);
+  // when onchange progressBar, call the function to calculate the current time
 
-  volumeSlider.addEventListener('input', handleVolume);
-  muteButton.addEventListener('click', handleMute);
+  progressBar.addEventListener("change", handleOnChangeProgressBar);
+
+  volumeSlider.addEventListener("input", handleVolume);
+  muteButton.addEventListener("click", handleMute);
 });

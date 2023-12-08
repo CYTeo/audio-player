@@ -88,9 +88,9 @@ body {
   grid-column-gap: 0.8rem;
   grid-row-gap: 0.1rem;
   grid-template-rows: auto;
-  grid-template-columns: 5% 80% 5%;
+  grid-template-columns: 10% 70% 10%;
   grid-auto-columns: 1fr;
-  justify-content: stretch;
+  justify-content: center;
   align-items: center;
   display: grid;
   position: relative;
@@ -126,7 +126,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto;
   gap: 10px;
-  grid-template-areas: 'item1 item2 item3';
+  grid-template-areas: "item1 item2 item3";
 }
 
 .item1 {
@@ -162,15 +162,15 @@ body {
   z-index: 999;
 } */
 
-a[data-audio='unmute'] .mute-icon {
-  background-image: url('https://img.icons8.com/?size=100&id=9982&format=png');
+a[data-audio="unmute"] .mute-icon {
+  background-image: url("https://img.icons8.com/?size=100&id=9982&format=png");
   background-size: 20px;
   background-repeat: no-repeat;
   padding: 10px;
   background-position: center center;
 }
-a[data-audio='mute'] .mute-icon {
-  background-image: url('https://img.icons8.com/?size=100&id=9414&format=png');
+a[data-audio="mute"] .mute-icon {
+  background-image: url("https://img.icons8.com/?size=100&id=9414&format=png");
   background-size: 20px;
   background-repeat: no-repeat;
   padding: 10px;
