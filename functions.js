@@ -1,13 +1,13 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   var file = null;
-  const audioFileInput = document.getElementById("audioFile");
-  const togglePlayButton = document.getElementById("toggleplaybtn");
-  const progressBar = document.getElementById("progressBar");
-  const volumeSlider = document.querySelector("#volumeSlider");
-  const muteButton = document.querySelector("#mutebtn");
+  const audioFileInput = document.getElementById('audioFile');
+  const togglePlayButton = document.getElementById('toggleplaybtn');
+  const progressBar = document.getElementById('progressBar');
+  const volumeSlider = document.querySelector('#volumeSlider');
+  const muteButton = document.querySelector('#mutebtn');
 
-  const currentTimeElement = document.getElementById("currentTime");
-  const totalDurationElement = document.getElementById("totalDuration");
+  const currentTimeElement = document.getElementById('currentTime');
+  const totalDurationElement = document.getElementById('totalDuration');
 
   let audioContext,
     source,
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // handle file input change
   function handleFileChange(event) {
-    console.log("file changed");
+    console.log('file changed');
     resetAll();
 
     clearBufferSource();
@@ -88,13 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleOnChangeProgressBar(event) {
-    console.log("event ", event);
+    console.log('event ', event);
     // console.log("value changed to  ", event.target.value);
     // console.log("total duration ", totalDuration);
 
     // the current time based on the progress bar
     currentTimeOnchangedProgress = event.target.value * totalDuration;
-    console.log("current time in progress bar", currentTimeOnchangedProgress);
+    console.log('current time in progress bar', currentTimeOnchangedProgress);
     currentTime = currentTimeOnchangedProgress;
 
     // clear source and create source again and call start(0,currenttime)
@@ -121,15 +121,15 @@ document.addEventListener("DOMContentLoaded", () => {
     progressBarValue = 0;
     currentTimeOnchangedProgress = 0;
 
-    togglePlayButton.setAttribute("data-audio", "pause");
+    togglePlayButton.setAttribute('data-audio', 'pause');
     progressBar.value = 0;
-    currentTimeElement.innerHTML = "00:00";
+    currentTimeElement.innerHTML = '00:00';
 
     isPlaying = false;
     continuePlay = false;
     progressBarHadler = false;
 
-    console.log("Reset all done");
+    console.log('Reset all done');
   }
 
   function playAudio() {
@@ -152,13 +152,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function pauseAudio() {
     if (isPlaying) {
       if (progressBarHadler) {
-        console.log("progressbar clicked!!!!");
+        console.log('progressbar clicked!!!!');
         currentTime = currentTimeOnchangedProgress;
       } else {
         currentTime = audioContext.currentTime;
       }
-      console.log("audio context", audioContext);
-      console.log("current time ", currentTime);
+      console.log('audio context', audioContext);
+      console.log('current time ', currentTime);
       audioContext.suspend();
 
       isPlaying = false;
@@ -168,19 +168,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleTogglePlayBtn() {
-    const audioData = togglePlayButton.getAttribute("data-audio");
+    const audioData = togglePlayButton.getAttribute('data-audio');
     console.log(audioData);
 
-    if (audioData == "pause") {
+    if (audioData == 'pause') {
       if (!source && !progressBarHadler) {
-        alert("MP3 source loading...");
+        alert('MP3 source loading...');
       } else {
         playAudio();
-        togglePlayButton.setAttribute("data-audio", "play");
+        togglePlayButton.setAttribute('data-audio', 'play');
       }
-    } else if (audioData == "play") {
+    } else if (audioData == 'play') {
       pauseAudio();
-      togglePlayButton.setAttribute("data-audio", "pause");
+      togglePlayButton.setAttribute('data-audio', 'pause');
     }
   }
 
@@ -188,17 +188,17 @@ document.addEventListener("DOMContentLoaded", () => {
     progressBarValue =
       (currentTime + audioContext.currentTime) / source.buffer.duration;
     progressBar.value = progressBarValue;
-    console.log("time now ", timeNow);
+    // console.log("time now ", timeNow);
     if (progressBarHadler) {
-      // currentTimeElement.innerHTML = (
-      //   currentTimeOnchangedProgress + audioContext.currentTime
-      // ).toFixed(2);
-      const timeNow = convertTime(currentTime + audioContext.currentTime);
-      currentTimeElement.innerHTML = timeNow;
+      currentTimeElement.innerHTML = (
+        currentTimeOnchangedProgress + audioContext.currentTime
+      ).toFixed(2);
+      // const timeNow = convertTime(currentTime + audioContext.currentTime);
+      // currentTimeElement.innerHTML = timeNow;
     } else {
-      // currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
-      const timeNow = convertTime(audioContext.currentTime);
-      currentTimeElement.innerHTML = timeNow;
+      currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
+      // const timeNow = convertTime(audioContext.currentTime);
+      // currentTimeElement.innerHTML = timeNow;
     }
     animationFrameId = requestAnimationFrame(updateProgressBar);
     if (audioContext.currentTime >= totalDuration) {
@@ -213,28 +213,28 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleVolume() {
     volumeValue = volumeSlider.value / 100;
     gainNode.gain.value = volumeValue;
-    muteButton.setAttribute("data-audio", "unmute");
+    muteButton.setAttribute('data-audio', 'unmute');
   }
 
   function handleMute() {
-    const audioData = muteButton.getAttribute("data-audio");
-    console.log("audioData ", audioData);
+    const audioData = muteButton.getAttribute('data-audio');
+    console.log('audioData ', audioData);
 
     // currently mute. after click, need to set to unmute and handle volume
-    if (audioData == "mute") {
-      muteButton.setAttribute("data-audio", "unmute");
+    if (audioData == 'mute') {
+      muteButton.setAttribute('data-audio', 'unmute');
       handleVolume();
     } else {
       // currently unmute. after click, need to set to mute and volume = 0
-      muteButton.setAttribute("data-audio", "mute");
+      muteButton.setAttribute('data-audio', 'mute');
       gainNode.gain.value = 0;
     }
   }
 
-  audioFileInput.addEventListener("change", handleFileChange);
-  togglePlayButton.addEventListener("click", handleTogglePlayBtn);
+  audioFileInput.addEventListener('change', handleFileChange);
+  togglePlayButton.addEventListener('click', handleTogglePlayBtn);
   // when onchange progressBar, call the function to calculate the current time
-  progressBar.addEventListener("change", handleOnChangeProgressBar);
-  volumeSlider.addEventListener("input", handleVolume);
-  muteButton.addEventListener("click", handleMute);
+  progressBar.addEventListener('change', handleOnChangeProgressBar);
+  volumeSlider.addEventListener('input', handleVolume);
+  muteButton.addEventListener('click', handleMute);
 });
