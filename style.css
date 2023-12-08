@@ -176,3 +176,10 @@ a[data-audio="mute"] .mute-icon {
   padding: 10px;
   background-position: center center;
 }
+
+a[data-audio="play"] .play-icon {
+  display: none;
+}
+a[data-audio="pause"] .pause-icon {
+  display: none;
+}

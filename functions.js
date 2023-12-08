@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   var file = null;
   const audioFileInput = document.getElementById("audioFile");
-  const playButton = document.getElementById("playbtn");
-  const pauseButton = document.getElementById("pausebtn");
+  const togglePlayButton = document.getElementById("toggleplaybtn");
   const progressBar = document.getElementById("progressBar");
   const volumeSlider = document.querySelector("#volumeSlider");
   const muteButton = document.querySelector("#mutebtn");
@@ -24,9 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentTime = 0;
   let volumeValue = 0.5;
 
-  console.log("volume ", volumeSlider);
   // handle file input change
   function handleFileChange(event) {
+    console.log("file changed");
+    resetAll();
+
+    clearBufferSource();
+    currentTime = 0;
     // once the file changed, load the audio file
     if (event.target.files.length > 0) {
       file = event.target.files[0];
@@ -68,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
     totalDurationElement.innerHTML = totalDuration.toFixed(2);
 
     if (replay) {
-      console.log("replay current time :", audioContext.currentTime);
       source.start(0, currentTime);
       updateProgressBar();
     }
@@ -91,6 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAudioFile(file, true);
     isPlaying = true;
     progressBarHadler = true;
+
+    handleTogglePlayBtn();
   }
 
   function clearBufferSource() {
@@ -101,6 +105,22 @@ document.addEventListener("DOMContentLoaded", () => {
       // Set the source to null
       source = null;
     }
+  }
+
+  function resetAll() {
+    currentTime = 0;
+    progressBarValue = 0;
+    currentTimeOnchangedProgress = 0;
+
+    togglePlayButton.setAttribute("data-audio", "pause");
+    progressBar.value = 0;
+    currentTimeElement.innerHTML = "00:00";
+
+    isPlaying = false;
+    continuePlay = false;
+    progressBarHadler = false;
+
+    console.log("Reset all done");
   }
 
   function playAudio() {
@@ -138,6 +158,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function handleTogglePlayBtn() {
+    const audioData = togglePlayButton.getAttribute("data-audio");
+    console.log(audioData);
+
+    if (audioData == "pause") {
+      if (!source && !progressBarHadler) {
+        alert("MP3 source loading...");
+      } else {
+        playAudio();
+        togglePlayButton.setAttribute("data-audio", "play");
+      }
+    } else if (audioData == "play") {
+      pauseAudio();
+      togglePlayButton.setAttribute("data-audio", "pause");
+    }
+  }
+
   function updateProgressBar() {
     // console.log("progressbar current time :", audioContext.currentTime);
     progressBarValue =
@@ -165,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleVolume() {
     volumeValue = volumeSlider.value / 100;
     gainNode.gain.value = volumeValue;
+    muteButton.setAttribute("data-audio", "unmute");
   }
 
   function handleMute() {
@@ -183,12 +221,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   audioFileInput.addEventListener("change", handleFileChange);
-  playButton.addEventListener("click", playAudio);
-  pauseButton.addEventListener("click", pauseAudio);
+  togglePlayButton.addEventListener("click", handleTogglePlayBtn);
   // when onchange progressBar, call the function to calculate the current time
-
   progressBar.addEventListener("change", handleOnChangeProgressBar);
-
   volumeSlider.addEventListener("input", handleVolume);
   muteButton.addEventListener("click", handleMute);
 });
