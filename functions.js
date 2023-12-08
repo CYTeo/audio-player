@@ -188,15 +188,16 @@ document.addEventListener("DOMContentLoaded", () => {
     progressBarValue =
       (currentTime + audioContext.currentTime) / source.buffer.duration;
     progressBar.value = progressBarValue;
-    const timeNow = convertTime(currentTime + audioContext.currentTime);
     console.log("time now ", timeNow);
     if (progressBarHadler) {
       // currentTimeElement.innerHTML = (
       //   currentTimeOnchangedProgress + audioContext.currentTime
       // ).toFixed(2);
+      const timeNow = convertTime(currentTime + audioContext.currentTime);
       currentTimeElement.innerHTML = timeNow;
     } else {
       // currentTimeElement.innerHTML = audioContext.currentTime.toFixed(2);
+      const timeNow = convertTime(audioContext.currentTime);
       currentTimeElement.innerHTML = timeNow;
     }
     animationFrameId = requestAnimationFrame(updateProgressBar);
